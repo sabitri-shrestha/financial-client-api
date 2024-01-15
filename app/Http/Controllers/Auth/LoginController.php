@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class LoginController extends Controller
 {
@@ -18,13 +20,13 @@ class LoginController extends Controller
 
         if ($validator->fails()) {
             // Return an Inertia response with validation errors
-            return Inertia::render('Login', ['errors' => $validator->errors()->toArray()])
+            return Inertia::render('Auth/Login', ['errors' => $validator->errors()->toArray()])
                 ->with('errorBag', 'login');
         }
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             // Return an Inertia response with custom error message
-            return Inertia::render('Login', ['errors' => ['Invalid credentials']])
+            return Inertia::render('Auth/Login', ['errors' => ['Invalid credentials']])
                 ->with('errorBag', 'login');
         }
 

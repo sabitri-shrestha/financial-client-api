@@ -3,19 +3,10 @@ import { useForm } from 'react-hook-form';
 import { Inertia } from '@inertiajs/inertia';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-const Register = () => {
+const Register = ({errors}) => {
     const { handleSubmit, register } = useForm();
-    const [errors, setErrors] = useState({});
-
     const onSubmit = async (data) => {
-        const response = await Inertia.post('/register', data);
-
-        if (response.errors) {
-            setErrors(response.errors);
-        } else {
-            // Redirect to the login page upon successful registration
-            Inertia.visit('/login');
-        }
+        Inertia.post('/register', data);
     };
 
     return (
@@ -38,6 +29,15 @@ const Register = () => {
                     <input type="password" className="form-control" placeholder="Confirm Password" {...register('confirmPassword')}/>
                     <label htmlFor="floatingPassword">Confirm Password</label>
                 </div>
+                {Object.keys(errors).length > 0 && (
+                    <div className="alert alert-danger">
+                        <ul>
+                            {Object.values(errors).map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
                 <button className="btn btn-primary w-100 py-2" type="submit">Register</button>
             </form>
         </main>

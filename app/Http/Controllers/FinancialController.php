@@ -25,17 +25,31 @@ class FinancialController extends Controller
 
     }
 
+
     public function getCompanyProfile(Request $request, $symbol)
     {
-        $profile = $this->financialModelingClient->getCompanyProfile($symbol,'profile');
+        $cacheKey = 'profile_results_' . $symbol;
+        if (Cache::has($cacheKey)) {
+            $profile = Cache::get($cacheKey);
+        } else {
+
+            $profile = $this->financialModelingClient->getCompanyData($symbol,'profile');
+
+            Cache::put($cacheKey, $profile, now()->addMinutes(60));
+        }
+
 
         return response()->json($profile);
     }
 
     public function getCompanyQuote(Request $request, $symbol)
     {
-        $quote = $this->financialModelingClient->getCompanyData($symbol,'quote');
-
+        $cacheKey = 'quote_results_' . $symbol;
+        if (Cache::has($cacheKey)) {
+            $quote = Cache::get($cacheKey);
+        } else {
+            $quote = $this->financialModelingClient->getCompanyData($symbol, 'quote');
+        }
         return response()->json($quote);
     }
 

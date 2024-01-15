@@ -2,22 +2,13 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Inertia } from '@inertiajs/inertia';
 
-const Login = () => {
+const Login = ({errors}) => {
     const { handleSubmit, register } = useForm();
-    const [errors, setErrors] = useState({});
+
 
     const onSubmit = async (data) => {
-        try {
-            const response = await Inertia.post('/login', data);
+        Inertia.post('/login', data);
 
-            if (response.errors) {
-                setErrors(response.errors);
-            } else {
-                Inertia.visit('/');
-            }
-        } catch (error) {
-            setErrors({ unexpected: 'An unexpected error occurred. Please try again later.' });
-        }
     };
 
     return (
@@ -43,6 +34,15 @@ const Login = () => {
                     />
                     <label htmlFor="floatingPassword">Password</label>
                 </div>
+                {Object.keys(errors).length > 0 && (
+                    <div className="alert alert-danger">
+                        <ul>
+                            {Object.values(errors).map((error, index) => (
+                                <li key={index}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
                 <div className="text-start my-3">
                     <p>
