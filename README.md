@@ -8,19 +8,26 @@ git clone https://github.com/sabitri-shrestha/financial-client-api.git
 # Navigate to the project directory
 cd financial-client-api
 
-# Install Laravel Sail and set up the environment
-composer install --ignore-platform-reqs
-php artisan sail:install  
-./vendor/bin/sail up -d
+#copy .env.example file and rename it to .env
 
-# Install PHP dependencies using Sail
-./vendor/bin/sail composer install
+#add your database variables in .env file  and add your key like this FINANCIAL_MODELING_API_KEY=your_key
+
+# Install Laravel Sail and set up the environment
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+
+# Run sail
+./vendor/bin/sail up -d  
 
 # Run database migrations and seed the database
-./vendor/bin/sail artisan migrate --seed
+./vendor/bin/sail artisan migrate
 
 # Install JavaScript dependencies using npm or yarn
-npm install  # or yarn
+./vendor/bin/sail npm install  # or yarn
 
 # Build assets
-npm run dev  # or yarn dev
+./vendor/bin/sail npm run dev  # or yarn dev
