@@ -9,7 +9,7 @@ git clone https://github.com/sabitri-shrestha/financial-client-api.git
 cd financial-client-api
 
 # Install Laravel Sail and set up the environment
-composer install  
+composer install --ignore-platform-reqs
 php artisan sail:install  
 ./vendor/bin/sail up -d
 
