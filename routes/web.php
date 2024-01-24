@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/financial-app', [FinancialController::class, 'index'])->name('financial-app.index');
     Route::get('/financial-app/company-profile/{symbol}', [FinancialController::class, 'getCompanyProfile'])->name('financial-app.company-profile');
     Route::get('/financial-app/company-quote/{symbol}', [FinancialController::class, 'getCompanyQuote'])->name('financial-app.company-quote');
+    Route::post('/financial-app/export', [FinancialController::class, 'export'])->name('search.export');
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -36,3 +37,5 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::post('/logout', [LoginController::class,'logout'])->name('logout');
+
+

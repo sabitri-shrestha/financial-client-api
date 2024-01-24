@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form, Button, Dropdown } from 'react-bootstrap';
 import CompanyQuoteTable from '@/components/SearchResultTable';
 import Header from '@/components/Header';
+import axios from 'axios';
+import { InertiaLink } from '@inertiajs/inertia-react';
 
 const Index = () => {
     const [searchResults, setSearchResults] = useState([]);
@@ -26,6 +28,18 @@ const Index = () => {
         }
     };
 
+    const handleExport = async () => {
+        try {
+            const response = await axios.post('/financial-app/export', { data: searchResults[0] });
+            const blob = new Blob([response.data]);
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'search_results.csv';
+            link.click();
+        } catch (error) {
+            console.error('Error exporting CSV:', error);
+        }
+    };
     return (
         <main>
             <Header />
@@ -61,6 +75,9 @@ const Index = () => {
                         {searchResults.length > 0 && (
                             <div>
                                 <h2>Search Results</h2>
+                                <Button onClick={handleExport} variant="secondary export-btn" type="submit">
+                                    Export CSV
+                                </Button>
                                 <CompanyQuoteTable data={searchResults[0][0]} />
                             </div>
                         )}
@@ -72,3 +89,4 @@ const Index = () => {
 };
 
 export default Index;
+
