@@ -2,7 +2,6 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const SearchResultTable = ({ data }) => {
-    console.log(data);
     return (
         <table className="table table-bordered">
             <tbody>

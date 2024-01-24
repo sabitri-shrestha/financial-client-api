@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Http\Clients\FinancialModelingClient;
+use App\Services\CsvExportService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class FinancialController extends Controller
@@ -53,4 +56,17 @@ class FinancialController extends Controller
         return response()->json($quote);
     }
 
-}
+    public function export(Request $request, CsvExportService $csvExportService)
+    {
+        $data = $request->input('data');
+        $filename = 'search_results.csv';
+
+        $csvContent = $csvExportService->export($data, $filename);
+
+        return response($csvContent)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+    }
+
+    }
