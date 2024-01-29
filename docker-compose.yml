@@ -66,6 +66,16 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+    test:
+        image: sail-8.3/app
+        environment:
+            WWWUSER: '${WWWUSER}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - mysql
 #    meilisearch:
 #        image: 'getmeili/meilisearch:latest'
 #        ports:
@@ -110,3 +120,4 @@ volumes:
         driver: local
 #    sail-meilisearch:
 #        driver: local
+
